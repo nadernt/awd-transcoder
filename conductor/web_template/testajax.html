@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://code.jquery.com/jquery-latest.min.js">
+</script>
+<script>
+$(document).ready(function(){
+$("#sendCommand").click(function(){
+	var myData = {		token:$("#token").val(),
+		rest_api:$("#rest_api").val(),
+		from_client_options:$("#from_client_options").val()
+		};
+	$.ajax({
+		url: 'http://localhost:8080/restreport/api_post',
+		type: 'POST',
+		data: myData,
+		dataType: 'text',
+		success: function (msg) 
+		{ 
+			var obj = jQuery.parseJSON(msg);
+			$("#server_result").text(JSON.stringify(obj)); 
+			},
+		error: function (err)
+			{ 
+		alert("Err: " + err.responseText)}
+		
+		});
+	});
+
+$("#Login").click(function(){
+	
+	var myData = {		username:$("#username").val(),
+		password:$("#password").val()
+			};
+	$.ajax({
+		
+		url: 'http://localhost:8080/restreport/login',
+		type: 'POST',
+		data: myData,
+		dataType: 'text',
+		success: function (msg) 
+		{
+			var obj = jQuery.parseJSON(msg);
+			$("#token").val(obj.token);
+			$("#server_result").text(msg); 
+			},
+		error: function (err)
+			{ 
+			alert("Err: " + err.responseText);
+		}
+		
+		});
+	});
+	
+	
+$("#Logout").click(function(){
+	
+	var myData = {		username:$("#username").val(),
+		password:$("#password").val()
+			};
+	$.ajax({
+		
+		url: 'http://localhost:8080/restreport/logout',
+		type: 'POST',
+		data: myData,
+		dataType: 'text',
+		success: function (msg) 
+		{
+			var obj = jQuery.parseJSON(msg);
+			$("#token").val(obj.token);
+			$("#server_result").text(msg); 
+			},
+		error: function (err)
+			{ 
+			alert("Err: " + err.responseText);
+		}
+		
+		});
+	});
+});
+</script>
+</head>
+<body>
+
+<fieldset>
+<label for='username' >Username:</label> 
+<input  type="text" id="username" value="nader"/>
+<label for='password' >Password:</label> 
+<input  type="text" id="password" value="123456"/>
+<br />
+<br />
+<button id="Login">Login</button>
+<button id="Logout">Logout</button>
+</fieldset>
+<fieldset>
+<input type="hidden" id="token" value=""/>
+<label for='rest_api' >REST API:</label> 
+<select id="rest_api">
+  <option value="servers_in_securitygroup">Number of servers_in_securitygroup</option>
+  <option value="servers_in_region">Number of servers_in_region</option>
+  <option value="conductor_status">conductor_status</option>
+  <option value="service_shutdown">service_shutdown</option>
+  <option value="service_status">service_status</option>
+  <option value="service_status">service_status</option>
+</select> 
+<label for='from_client_options' >Client Option to Send:</label> 
+<select id="from_client_options">
+  <option value="encoder_security_group">Encoder Security Group</option>
+  <option value="">-----Option Empty-----</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>
+  
+</select> 
+<br />
+<br />
+<button id="sendCommand">Send an HTTP POST request to a page and get the result back</button>
+</fieldset>
+<br />
+<br />
+<div id="server_result" style="border:2px solid grey;">Server Response</div>
+</body>
+</html>
